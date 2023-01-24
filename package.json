@@ -7,11 +7,21 @@
 		"svelte-components",
 		"sveltejs"
 	],
+	"files": [
+		"dist"
+	],
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"types": "dist/index.d.ts",
 	"bugs": {
 		"url": "https://github.com/geerew/svelte-components/issues"
 	},
 	"license": "MIT",
-	"repository": "github:geerew/svelte-components",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/geerew/svelte-components.git"
+	},
 	"scripts": {
 		"build": "svelte-kit sync && tsup",
 		"dev": "vite dev",
