@@ -7,7 +7,7 @@ export interface Expandable {
 	expanded: boolean;
 }
 
-//
+// Default properties
 export const defaultExpanded: Expandable = {
 	expanded: false
 };
@@ -20,12 +20,7 @@ const ariaExpanded = 'aria-expanded';
 export const setAriaExpanded =
 	(store: Readable<Expandable>): Action =>
 	(container) => {
-		const { subscribe } = derived(
-			store,
-			($newStore) => $newStore.expanded
-		);
+		const { subscribe } = derived(store, ($newStore) => $newStore.expanded);
 
-		return subscribe(
-			ariaAttributeBoolean(ariaExpanded, container)
-		);
+		return subscribe(ariaAttributeBoolean(ariaExpanded, container));
 	};

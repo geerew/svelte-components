@@ -5,7 +5,7 @@ import type { Expandable } from './aria-expanded';
 import type { Action } from './actions';
 import { Tab } from './keys';
 
-//  Focusable elements (from https://stackoverflow.com/a/30753870)
+// Focusable elements (from https://stackoverflow.com/a/30753870)
 const focusableSelector = [
 	'[contentEditable=true]',
 	'[tabindex]',
@@ -20,11 +20,13 @@ const focusableSelector = [
 
 // Handle 2 states:
 //
-//  TAB       -> When the last focusable element within a container is
-// 				 selected, move to the first focusable element
-//  SHIFT+TAB -> When the first focusable element within a container is
-// 				 selected, move to the last focusable element
-const onKeyDown = (event: KeyboardEvent) => {
+//  TAB       -> When the last focusable element within the container is
+// 				 selected, wrap around to the first focusable element within
+//               the container
+//  SHIFT+TAB -> When the first focusable element within the container is
+// 				 selected, wrap around to the last focusable element within
+//				 the container
+const focusTrapHandler = (event: KeyboardEvent) => {
 	if (event.key !== Tab) return;
 
 	const container = event.currentTarget as HTMLElement;
@@ -34,9 +36,7 @@ const onKeyDown = (event: KeyboardEvent) => {
 	if (!container.contains(element)) return;
 
 	// Find all focusable elements
-	const focusable = [
-		...container.querySelectorAll(focusableSelector)
-	];
+	const focusable = [...container.querySelectorAll(focusableSelector)];
 
 	const first = focusable[0] as HTMLElement;
 	const last = focusable.at(-1) as HTMLElement;
@@ -46,8 +46,7 @@ const onKeyDown = (event: KeyboardEvent) => {
 	if (element === first && event.shiftKey) {
 		last.focus();
 
-		if (!last.hasAttribute('tabindex'))
-			last.setAttribute('tabindex', '0');
+		if (!last.hasAttribute('tabindex')) last.setAttribute('tabindex', '0');
 
 		event.preventDefault();
 	}
@@ -57,31 +56,21 @@ const onKeyDown = (event: KeyboardEvent) => {
 	if (element === last && !event.shiftKey) {
 		first.focus();
 
-		if (!first.hasAttribute('tabindex'))
-			first.setAttribute('tabindex', '0');
+		if (!first.hasAttribute('tabindex')) first.setAttribute('tabindex', '0');
 
 		event.preventDefault();
 	}
 };
 
 // Find all focusable elements within a container
-export function getFocusableElements(
-	container: HTMLElement | null = document.body
-) {
+export function getFocusableElements(container: HTMLElement | null = document.body) {
 	if (container == null) return [];
 
-	return Array.from(
-		container.querySelectorAll<HTMLElement>(
-			focusableSelector
-		)
-	).sort(
+	return Array.from(container.querySelectorAll<HTMLElement>(focusableSelector)).sort(
 		// Move `tabindex="0"` to the end of the list, which
 		// is what the browser does
 		(a, b) =>
-			Math.sign(
-				(a.tabIndex || Number.MAX_SAFE_INTEGER) -
-					(b.tabIndex || Number.MAX_SAFE_INTEGER)
-			)
+			Math.sign((a.tabIndex || Number.MAX_SAFE_INTEGER) - (b.tabIndex || Number.MAX_SAFE_INTEGER))
 	);
 }
 
@@ -91,33 +80,31 @@ export function getFocusableElements(
 export const trapFocus =
 	(store: Readable<Expandable>): Action =>
 	(container) => {
-		const { subscribe } = derived(
-			store,
-			($store) => $store.expanded
-		);
+		const { subscribe } = derived(store, ($store) => $store.expanded);
 
 		return subscribe((expanded) => {
 			if (expanded) {
-				// Find first focusable element
+				// Find the first focusable element within the
+				// container
 				const focusable = getFocusableElements(container);
 
-				// // Focus on
+				// Set focus on the first focusable element within
+				// this container
 				if (focusable) {
 					requestAnimationFrame(() => {
 						const next = focusable[0] as HTMLElement;
 
 						next.focus();
 
-						if (!next.hasAttribute('tabindex'))
-							next.setAttribute('tabindex', '0');
+						if (!next.hasAttribute('tabindex')) next.setAttribute('tabindex', '0');
 					});
 				}
 
 				// Start listening for TAB events
-				container.addEventListener('keydown', onKeyDown);
+				container.addEventListener('keydown', focusTrapHandler);
 			} else {
 				// Stop listening for TAB events
-				container.removeEventListener('keydown', onKeyDown);
+				container.removeEventListener('keydown', focusTrapHandler);
 			}
 		});
 	};
