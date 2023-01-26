@@ -11,12 +11,7 @@ const ariaModal = 'aria-modal';
 export const setAriaModal =
 	(store: Readable<Expandable>): Action =>
 	(container) => {
-		const { subscribe } = derived(
-			store,
-			($newStore) => $newStore.expanded
-		);
+		const { subscribe } = derived(store, ($newStore) => $newStore.expanded);
 
-		return subscribe(
-			ariaAttributeBoolean(ariaModal, container)
-		);
+		return subscribe(ariaAttributeBoolean(ariaModal, container));
 	};
