@@ -1,0 +1,64 @@
+{
+	"name": "@svelty/headless",
+	"version": "0.0.1",
+	"keywords": [
+		"svelte",
+		"svelty",
+		"headless"
+	],
+	"bugs": {
+		"url": "https://github.com/geerew/svelty/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/geerew/svelty.git"
+	},
+	"license": "MIT",
+	"author": {
+		"name": "Michael Bell"
+	},
+	"type": "module",
+	"exports": {
+		".": "./dist/index.js"
+	},
+	"types": "dist/index.d.ts",
+	"files": [
+		"dist"
+	],
+	"scripts": {
+		"build": "svelte-kit sync && tsup",
+		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
+		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
+		"dev": "vite dev",
+		"format": "prettier --plugin-search-dir . --write .",
+		"lint": "prettier --plugin-search-dir . --check .",
+		"preview": "vite preview"
+	},
+	"devDependencies": {
+		"@sveltejs/adapter-auto": "^1.0.0",
+		"@sveltejs/kit": "^1.0.0",
+		"prettier": "^2.8.0",
+		"prettier-plugin-svelte": "^2.9.0",
+		"svelte": "^3.54.0",
+		"svelte-check": "^3.0.1",
+		"tslib": "^2.4.1",
+		"tsup": "^6.5.0",
+		"typescript": "^4.9.3",
+		"vite": "^4.0.0"
+	},
+	"tsup": {
+		"entry": [
+			"src/lib/index.ts"
+		],
+		"format": [
+			"esm"
+		],
+		"external": [
+			"svelte/store"
+		],
+		"sourcemap": true,
+		"minify": true,
+		"clean": true,
+		"dts": true
+	}
+}

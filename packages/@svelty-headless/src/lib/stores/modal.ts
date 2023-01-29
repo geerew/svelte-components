@@ -9,12 +9,12 @@ import {
 } from '$lib/internal/on-click-outside';
 import { defaultEscapable, onEscape, type Escapable } from '$lib/internal/on-escape';
 import { setRoleAction } from '$lib/internal/role';
-import { writable } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 
 interface Modal extends Expandable, Escapable, ClickOutside {}
 
 // Create a modal store
-//  * subscribe - Store of type Modal
+//  * subscribe - Derived store of type modal
 //  * action    - Action to define the modal (use:modal.action)
 //  * open      - Function to open the modal
 //  * close     - Function to close the modal
@@ -35,6 +35,9 @@ export function createModal(props?: Partial<Modal>) {
 	const open = () => set({ expanded: true });
 	const close = () => set({ expanded: false });
 
+	// Create a derived (readable) store, containing only `expanded`
+	const subscribe = derived(store, ($store) => $store.expanded);
+
 	// Apply actions to the modal (e.g. use:modal.action)
 	const action = (node: HTMLElement) => {
 		const destroy = applyActions(node, [
@@ -49,7 +52,7 @@ export function createModal(props?: Partial<Modal>) {
 	};
 
 	return {
-		subscribe: store.subscribe,
+		subscribe,
 		open,
 		close,
 		action
