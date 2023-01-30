@@ -36,7 +36,9 @@ export function createModal(props?: Partial<Modal>) {
 	const close = () => set({ expanded: false });
 
 	// Create a derived (readable) store, containing only `expanded`
-	const subscribe = derived(store, ($store) => $store.expanded);
+	const { subscribe } = derived(store, ($state) => {
+		return { expanded: $state.expanded };
+	});
 
 	// Apply actions to the modal (e.g. use:modal.action)
 	const action = (node: HTMLElement) => {
