@@ -7,7 +7,7 @@ node_modules
 
 # Svelte
 build
-dist
+package
 .svelte-kit
 
 # Environment
