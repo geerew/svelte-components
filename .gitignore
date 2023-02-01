@@ -13,3 +13,6 @@ dist
 # Environment
 .env*
 !.env.example
+
+# TMP
+packages/docs
