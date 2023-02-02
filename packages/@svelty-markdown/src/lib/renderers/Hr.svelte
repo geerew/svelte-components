@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Renderers } from '$lib';
+	import type { Renderers } from '$lib/types';
 
 	export let type = 'hr';
 	export let raw: string;

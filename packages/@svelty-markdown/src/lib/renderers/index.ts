@@ -1,4 +1,4 @@
-import type { Renderers } from '$lib';
+import type { Renderers } from '$lib/types';
 import Blockquote from './Blockquote.svelte';
 import Br from './Br.svelte';
 import Code from './Code.svelte';

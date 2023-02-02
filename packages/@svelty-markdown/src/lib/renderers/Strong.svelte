@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Renderers } from '$lib';
+	import type { Renderers } from '$lib/types';
 	import type { marked } from 'marked';
 
 	export let type = 'strong';

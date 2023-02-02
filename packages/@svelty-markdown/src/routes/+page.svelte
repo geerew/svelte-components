@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Markdown } from '$lib';
+	import Markdown from '$lib/components/Markdown.svelte';
 	import Uppercase from '$lib/extensions/renderers/Uppercase.svelte';
 	import { uppercaseTokenizer } from '$lib/extensions/tokenizers/uppercase';
 	import type { marked } from 'marked';

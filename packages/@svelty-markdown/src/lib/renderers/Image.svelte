@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Renderers } from '$lib';
+	import type { Renderers } from '$lib/types';
 	import { decode } from 'html-entities';
 
 	export let type: 'image';

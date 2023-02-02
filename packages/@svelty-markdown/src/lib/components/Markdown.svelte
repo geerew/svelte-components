@@ -1,5 +1,5 @@
 <script lang="ts">
-	import type { Renderers } from '$lib';
+	import type { Renderers } from '$lib/types';
 	import { defaultRenderers } from '$lib/renderers';
 	import { marked } from 'marked';
 	import { createEventDispatcher, onMount } from 'svelte';

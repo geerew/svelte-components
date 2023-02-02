@@ -1,4 +1,4 @@
-import { Markdown } from '$lib';
+import Markdown from '$lib';
 import { render, screen } from '@testing-library/svelte';
 
 describe('Markdown Initialization', async () => {

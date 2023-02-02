@@ -1,2 +1,3 @@
-export * from './components';
-export * from './index.d';
+import Markdown from './components/Markdown.svelte';
+
+export default Markdown;

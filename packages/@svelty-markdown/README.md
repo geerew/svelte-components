@@ -16,7 +16,7 @@ pnpm add @svelty/markdown
 
 ```html
 <script lang="ts">
-	import { Markdown } from '$lib';
+	import Markdown from '$lib';
 
 	const source = `# H1 Header
 	
@@ -174,7 +174,7 @@ A `parsed` event will be dispatched when the source has be parsed. This give acc
 
 ```html
 <script lang="ts">
-	import { Markdown } from '@svelty/markdown';
+	import Markdown from '@svelty/markdown';
 	import type { marked } from 'marked';
 
 	const source = `# Hello`;
@@ -198,7 +198,7 @@ Create a new `codespan` Svelte component:
 ```html
 <!-- CodeSpanOverride.svelte -->
 <script lang="ts">
-	import type { Renderers } from '$lib';
+	import type { Renderers } from '@svelty/markdown';
 
 	export let type = 'codespan';
 	export let raw: string;
@@ -219,7 +219,7 @@ Add `renderers={}` to `<Markdown .../>`, to override the existing `codespan` typ
 ```html
 <!-- +page.svelte -->
 <script lang="ts">
-	import { Markdown } from '@Svelty/markdown';
+	import Markdown from '@Svelty/markdown';
 	import CodeSpanNew from '$lib/CodeSpanNew.svelte';
 
 	const source = 'This is a `codespan` that is red and enclosed in [...]';
@@ -322,7 +322,7 @@ An example would be
 ```html
 <!-- $lib/Uppercase.svelte -->
 <script lang="ts">
-	import type { Renderers } from '$lib';
+	import type { Renderers } from '@svelty/markdown';
 	import type { marked } from 'marked';
 
 	export let type = 'uppercase';
@@ -356,7 +356,7 @@ A completed `+page.svelte` might look like
 
 ```html
 <script lang="ts">
-	import { Markdown } from '@svelty/markdown';
+	import Markdown from '@svelty/markdown';
 	import Uppercase from '$lib/extensions/renderers/Uppercase.svelte';
 	import { uppercaseTokenizer } from '$lib/extensions/tokenizers/uppercase';
 
