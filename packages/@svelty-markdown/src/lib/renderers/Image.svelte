@@ -1,6 +1,6 @@
 <script lang="ts">
 	import type { Renderers } from '$lib/types';
-	import { decode } from 'html-entities';
+	import { decode } from 'he';
 
 	export let type: 'image';
 	export let raw: string;
@@ -14,8 +14,9 @@
 	raw;
 	renderers;
 
-	const decodedTitle = decode(title) || title;
-	const decodedText = decode(text) || text;
+	// Decode(incase it contains encodings)
+	const decodedTitle = decode(title);
+	const decodedText = decode(text);
 </script>
 
 <img src={href} title={decodedTitle} alt={decodedText} />

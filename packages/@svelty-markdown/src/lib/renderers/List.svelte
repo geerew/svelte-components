@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { MarkedListItem, Renderers } from '$lib';
+	import type { Renderers } from '$lib';
+	import type { MarkedListItem } from '$lib/types';
 
 	export let type: 'list';
 	export let raw: string;

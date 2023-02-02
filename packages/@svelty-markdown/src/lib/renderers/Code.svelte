@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Renderers } from '$lib/types';
+	import { decode } from 'he';
 
 	export let type: 'code';
 	export let raw: string;
@@ -10,9 +11,12 @@
 
 	// Disable warning about unused variables
 	type;
-	text;
+	raw;
 	codeBlockStyle;
 	renderers;
+
+	// Decode the text (incase it contains encodings)
+	const decoded = decode(text);
 </script>
 
-<pre class={lang}><code>{raw}</code></pre>
+<pre class={lang}><code>{decoded}</code></pre>

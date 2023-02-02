@@ -1,5 +1,6 @@
 <script lang="ts">
-	import type { MarkedTableCell, MarkedTableCellAlignment, Renderers } from '$lib';
+	import type { Renderers } from '$lib';
+	import type { MarkedTableCell, MarkedTableCellAlignment } from '$lib/types';
 
 	export let rows: MarkedTableCell[][];
 	export let align: MarkedTableCellAlignment[];

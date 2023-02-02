@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { Renderers } from '$lib/types';
+	import { decode } from 'he';
 	import type { marked } from 'marked';
 
 	export let type = 'text';
@@ -10,7 +11,10 @@
 
 	// Disable warning about unused variables
 	type;
-	text;
+	raw;
+
+	// Decode the text (incase it contains encodings)
+	const decoded = decode(text);
 </script>
 
 <!-- 
@@ -22,5 +26,5 @@
 		<svelte:component this={renderers[token.type]} {...token} {renderers} />
 	{/each}
 {:else}
-	{raw}
+	{decoded}
 {/if}

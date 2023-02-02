@@ -1,7 +1,6 @@
 <script lang="ts">
-	import type { MarkedTableCell, MarkedTableCellAlignment, Renderers } from '$lib';
-	import TableBody from './TableBody.svelte';
-	import TableHeader from './TableHeader.svelte';
+	import type { Renderers } from '$lib';
+	import type { MarkedTableCell, MarkedTableCellAlignment } from '$lib/types';
 
 	export let type: 'table';
 	export let raw: string;
