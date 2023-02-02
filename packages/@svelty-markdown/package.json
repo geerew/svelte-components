@@ -30,16 +30,16 @@
 		"package"
 	],
 	"scripts": {
-		"build": "svelte-kit sync && svelte-package",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"dev": "vite",
 		"format": "prettier --plugin-search-dir . --write .",
 		"lint": "prettier --plugin-search-dir . --check . && eslint .",
+		"package": "svelte-kit sync && svelte-package",
 		"sync": "svelte-kit sync",
 		"test": "vitest"
 	},
 	"dependencies": {
-		"html-entities": "^2.3.3",
+		"he": "^1.2.0",
 		"marked": "^4.2.12"
 	},
 	"devDependencies": {
@@ -48,6 +48,7 @@
 		"@sveltejs/package": "^1.0.0-next.6",
 		"@testing-library/jest-dom": "^5.16.5",
 		"@testing-library/svelte": "^3.2.2",
+		"@types/he": "^1.1.2",
 		"@types/marked": "^4.0.8",
 		"@types/testing-library__jest-dom": "^5.14.5",
 		"@typescript-eslint/eslint-plugin": "^5.45.0",
@@ -58,11 +59,14 @@
 		"jsdom": "^21.1.0",
 		"prettier": "^2.8.0",
 		"prettier-plugin-svelte": "^2.8.1",
-		"svelte": "^3.54.0",
+		"svelte": "^3.55.1",
 		"svelte-check": "^2.9.2",
 		"tslib": "^2.4.1",
 		"typescript": "^4.9.3",
 		"vite": "^4.0.0",
 		"vitest": "^0.28.3"
+	},
+	"peerDependencies": {
+		"svelte": "^3.55.1"
 	}
 }
