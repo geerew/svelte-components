@@ -8,8 +8,8 @@
 
 	// Disable warning about unused variables
 	type;
-	text;
+	raw;
 	renderers;
 </script>
 
-<code>{raw.substring(1, raw.length - 1)}</code>
+<code>{text}</code>
