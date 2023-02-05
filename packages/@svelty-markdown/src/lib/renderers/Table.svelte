@@ -1,13 +1,15 @@
 <script lang="ts">
-	import type { Renderers } from '$lib';
-	import type { MarkedTableCell, MarkedTableCellAlignment } from '$lib/types';
+	import { renderersKey } from '$lib/contexts/renderers';
+	import type { MarkedTableCell, MarkedTableCellAlignment, Renderers } from '$lib/types';
+	import { getContext } from 'svelte';
 
 	export let type: 'table';
 	export let raw: string;
 	export let align: MarkedTableCellAlignment[];
 	export let header: MarkedTableCell[];
 	export let rows: MarkedTableCell[][];
-	export let renderers: Renderers = {};
+
+	const renderers: Renderers = getContext(renderersKey);
 
 	// Disable warning about unused variables
 	type;
@@ -16,8 +18,8 @@
 
 <table>
 	<!-- Table head -->
-	<svelte:component this={renderers['table_header']} {header} {renderers} {align} />
+	<svelte:component this={renderers['table_header']} {header} {align} />
 
 	<!-- Table body -->
-	<svelte:component this={renderers['table_body']} {rows} {renderers} {align} />
+	<svelte:component this={renderers['table_body']} {rows} {align} />
 </table>

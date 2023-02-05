@@ -1,6 +1,8 @@
 <script lang="ts">
 	import type { Renderers } from '$lib';
+	import { renderersKey } from '$lib/contexts/renderers';
 	import type { MarkedListItem } from '$lib/types';
+	import { getContext } from 'svelte';
 
 	export let type: 'list';
 	export let raw: string;
@@ -8,7 +10,8 @@
 	export let start: number | '';
 	export let loose: boolean;
 	export let items: MarkedListItem[];
-	export let renderers: Renderers = {};
+
+	const renderers: Renderers = getContext(renderersKey);
 
 	// Disable warning about unused variables
 	type;
@@ -25,6 +28,6 @@
 -->
 <svelte:element this={elemType} start={startAttribute}>
 	{#each items as item}
-		<svelte:component this={renderers[item.type]} {...item} {renderers} />
+		<svelte:component this={renderers[item.type]} {...item} />
 	{/each}
 </svelte:element>

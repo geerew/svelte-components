@@ -1,10 +1,22 @@
 <script lang="ts">
 	import type { Renderers } from '$lib/types';
 	import { defaultRenderers } from '$lib/renderers';
-	import { marked } from 'marked';
-	import { createEventDispatcher, onMount } from 'svelte';
+	import { marked, Slugger } from 'marked';
+	import { afterUpdate, createEventDispatcher, onMount } from 'svelte';
+	import { setContext } from 'svelte';
+	import { sluggerKey } from '$lib/contexts/slugger';
+	import { renderersKey } from '$lib/contexts/renderers';
 
-	const dispatch = createEventDispatcher<{ parsed: marked.Token[] | marked.TokensList }>();
+	// ----------------------
+	// Dispatchers
+	// ----------------------
+
+	const dispatchParsed = createEventDispatcher<{ parsed: marked.Token[] | marked.TokensList }>();
+	const dispatchRendered = createEventDispatcher<{ rendered: boolean }>();
+
+	// ----------------------
+	// Exports
+	// ----------------------
 
 	// String to parse
 	export let source: string;
@@ -31,6 +43,10 @@
 	// Set the custom tokenizers
 	marked.use({ extensions: tokenizers });
 
+	// ----------------------
+	// Reactive setup
+	// ----------------------
+
 	// Update the marked options
 	$: marked.setOptions({ ...marked.defaults, ...options });
 
@@ -43,26 +59,42 @@
 
 	let tokens: marked.Token[] | marked.TokensList;
 
+	// Slugger for headings
 	$: {
-		// Create a new lexer
-		let lexer = new marked.Lexer(marked.defaults);
+		source ? setContext(sluggerKey, new Slugger()) : undefined;
+	}
 
-		// Parse tokens
+	// Parse tokens
+	$: {
+		let lexer = new marked.Lexer(marked.defaults);
 		tokens = isInline ? lexer.inlineTokens(source) : lexer.lex(source);
 	}
 
+	// Dispatch `parsed` when the tokens was changed
 	$: {
-		// Dispatch `parsed` when the tokens was changed
-		dispatch('parsed', tokens);
+		dispatchParsed('parsed', tokens);
 	}
 
 	// Combine the default renderers and additional/overriding
-	// renderers
-	$: renderers = { ...defaultRenderers, ...renderers };
+	// renderers + set the context (so we don't have to pass the
+	// renderers around as props)
+	$: renderers = (() => {
+		const newRenderers = { ...defaultRenderers, ...renderers };
+		setContext(renderersKey, newRenderers);
+		return newRenderers;
+	})();
 
+	// ----------------------
+	// Lifecycle
+	// ----------------------
+
+	afterUpdate(async () => {
+		dispatchRendered('rendered', true);
+	});
+
+	// On mount, dispatchParsed `parsed`
 	onMount(async () => {
-		// On mount, dispatch `parsed`
-		dispatch('parsed', tokens);
+		if (tokens) dispatchParsed('parsed', tokens);
 	});
 </script>
 
@@ -76,6 +108,6 @@
 <!-- Render using svelte:component -->
 {#if tokens.length > 0}
 	{#each tokens as token}
-		<svelte:component this={renderers[token.type]} {...token} {renderers} />
+		<svelte:component this={renderers[token.type]} {...token} />
 	{/each}
 {/if}

@@ -170,9 +170,13 @@ The types and their associated Svelte components are defined in [index.ts](./src
 
 ## Events
 
-A `parsed` event will be dispatched when the source has be parsed. This give access to the tokens, allowing for additional needs, such as generating a ToC (Table of Contents) from the headings.
+Several events are fired at different stages of the lifecycle
+
+- `parsed` - Dispatched during onMount(), after the source has be parsed, giving access to the tokens
+- `rendered` - Dispatched during afterUpdate(), letting the caller know the DOM is in sync with the data
 
 ```html
+<!-- +page.svelte -->
 <script lang="ts">
 	import Markdown from '@svelty/markdown';
 	import type { marked } from 'marked';
@@ -182,9 +186,13 @@ A `parsed` event will be dispatched when the source has be parsed. This give acc
 	function parsed(event: CustomEvent<marked.Token[] | marked.TokensList>) {
 		console.log(event.detail);
 	}
+
+	function rendered(event: CustomEvent<boolean>) {
+		console.log(event.detail);
+	}
 </script>
 
-<Markdown {source} on:parsed="{parsed}" />
+<Markdown {source} on:parsed="{parsed}" on:rendered="{rendered}" />
 ```
 
 ## Override existing renderer
@@ -198,17 +206,13 @@ Create a new `codespan` Svelte component:
 ```html
 <!-- CodeSpanOverride.svelte -->
 <script lang="ts">
-	import type { Renderers } from '@svelty/markdown';
-
 	export let type = 'codespan';
 	export let raw: string;
 	export let text: string;
-	export let renderers: Renderers;
 
 	// Disable warning about unused variables
 	type;
 	text;
-	renderers;
 </script>
 
 <code style="color: red;">[{raw.substring(1, raw.length - 1)}]</code>
@@ -322,14 +326,17 @@ An example would be
 ```html
 <!-- $lib/Uppercase.svelte -->
 <script lang="ts">
+	import { renderersKey } from '@svelty/markdown';
 	import type { Renderers } from '@svelty/markdown';
 	import type { marked } from 'marked';
+	import { getContext } from 'svelte';
 
 	export let type = 'uppercase';
 	export let raw: string;
 	export let text: string;
 	export let tokens: marked.Token[];
-	export let renderers: Renderers;
+
+	const renderers: Renderers = getContext(renderersKey);
 
 	// Disable warning about unused variables
 	type;
@@ -346,7 +353,7 @@ An example would be
 	example, text || em || strong
 -->
 {#each tokens as token}
-<svelte:component this="{renderers[token.type]}" {...token} {renderers} />
+<svelte:component this="{renderers[token.type]}" {...token} />
 {/each}
 ```
 
@@ -394,9 +401,7 @@ This is a list of the default [renderers](./src/lib/renderers)
 
 ### Extensions
 
-The extension can be found in `$lib/extensions`
-
-Each renderer will be pared with a tokenizer, unless overriding a default renderer
+Extensions can be found in `$lib/extensions`
 
 To use these extension update `<Markdown .../>` to include `renderers` and `tokenizers`
 
