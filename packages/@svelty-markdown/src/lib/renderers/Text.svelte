@@ -18,7 +18,6 @@
 
 	// Decode the text (incase it contains encodings)
 	const decoded = decode(text);
-	console.log('de', decoded);
 </script>
 
 <!-- 
